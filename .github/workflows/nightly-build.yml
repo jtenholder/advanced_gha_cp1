@@ -9,21 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create a tag for the archive
-        run: echo "::set-output name=TAG::$(date +%F)"
+        run: echo "TAG=$(date +%F)" >> $GITHUB_OUTPUT
         id: tag
         
       - name: Starting the nightly build for ${{ steps.tag.outputs.TAG }}
-        run: echo "The tag is ${{ steps.tag.outputs.TAG }}"
+        run: echo "The tag is $TAG"
         
       - name: Check out the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         
       - name: Create the artifact
-        run: tar -cvf nightly-${{ steps.tag.outputs.TAG }}.tar ./*
+        run: tar -cvf nightly-$TAG.tar ./*
         
       - name: Upload the artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-         name: nightly-${{ steps.tag.outputs.TAG }}.tar
-         path: nightly-${{ steps.tag.outputs.TAG }}.tar
+         name: nightly-$TAG.tar
+         path: nightly-$TAG.tar
 
